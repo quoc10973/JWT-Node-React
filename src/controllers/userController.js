@@ -11,6 +11,18 @@ const createUsser = async (req, res) => {
     return res.status(200).json(user);
 }
 
+const checkLogin = async (req, res) => {
+    const { email, password } = req.body;
+    console.log({ email, password });
+    try {
+        let token = await userService.checkUserLogin(email, password);
+        return res.status(200).json(token);
+    } catch (e) {
+        return res.status(400).json(e);
+    }
+}
+
 module.exports = {
-    createUsser: createUsser
+    createUsser: createUsser,
+    checkLogin: checkLogin
 }
