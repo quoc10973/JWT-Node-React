@@ -5,6 +5,7 @@ const saltRounds = 10;
 const createUser = async (user) => {
     return new Promise((resolve, reject) => {
         let salt = bcrypt.genSaltSync(saltRounds);
+        user.role = "Customer";
         user.password = bcrypt.hashSync(user.password, salt);
         db.User.create(user).then(data => {
             resolve(data);
