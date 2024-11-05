@@ -15,6 +15,39 @@ const createUser = async (user) => {
     });
 }
 
+const checkUserLogin = async (email, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { email: email }
+            });
+            if (user) {
+                let checkPass = bcrypt.compareSync(password, user.password);
+                if (checkPass) {
+                    //access token generate for user
+                    let token = "access_token";
+                    resolve(token);
+                } else {
+                    reject({
+                        EC: "1",
+                        EM: "Email/Pasword is not correct" //EC: error code, EM: error message
+                    });
+                }
+            }
+            else {
+                reject({
+                    EC: "2",
+                    EM: "Email/Pasword is not correct"
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+
+    });
+}
+
 module.exports = {
-    createUser: createUser
+    createUser: createUser,
+    checkUserLogin: checkUserLogin
 }
