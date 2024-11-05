@@ -2,10 +2,10 @@ const { Sequelize } = require('sequelize');
 
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('SERN', 'root', 'root', {
-  host: 'localhost',
-  dialect: 'mysql',
- logging: false
+const sequelize = new Sequelize('JWTNodejs', 'root', 'root', {
+    host: 'localhost',
+    dialect: 'mysql',
+    logging: false
 });
 
 let connectDB = async () => {

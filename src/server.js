@@ -1,16 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser'; //lấy các tham số từ client gửi //user?id=7 => body-parser giúp lấy số 7
 import viewEngine from './config/viewEngine';
-import initWebRoutes from './route/web';
+import initWebRoutes from './route/APIrpoute';
 import connectDB from './config/connectDB';
 import db from './models/index';
+const cors = require('cors');
 require('dotenv').config(); //dùng để đọc file env
 
+
 let app = express();
+app.use(cors());
 
 //config app
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 viewEngine(app);
 initWebRoutes(app);
