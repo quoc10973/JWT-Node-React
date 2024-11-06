@@ -1,6 +1,8 @@
 import db from "../models"
 const bcrypt = require('bcrypt'); //thư viện mã hóa password
 const saltRounds = 10;
+const jwt = require('jsonwebtoken'); //thư viện tạo token
+require('dotenv').config();
 
 const createUser = async (user) => {
     return new Promise((resolve, reject) => {
@@ -25,8 +27,20 @@ const checkUserLogin = async (email, password) => {
                 let checkPass = bcrypt.compareSync(password, user.password);
                 if (checkPass) {
                     //access token generate for user
-                    let token = "access_token";
-                    resolve(token);
+                    const playload = { email: user.email, name: user.name };
+                    const accesstoken = jwt.sign(
+                        playload,
+                        process.env.JWT_SECRET,
+                        { expiresIn: process.env.JWT_EXPIRES }
+                    )
+                    resolve({
+                        accesstoken: accesstoken,
+                        user: {
+                            name: user.name,
+                            email: user.email,
+                        }
+
+                    });
                 } else {
                     reject({
                         EC: "1",
