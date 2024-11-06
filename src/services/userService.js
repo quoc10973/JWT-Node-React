@@ -30,7 +30,6 @@ const checkUserLogin = async (email, password) => {
                     const playload = { email: user.email, name: user.name };
 
                     const accessToken = jwt.sign(
-
                         playload,
                         process.env.JWT_SECRET,
                         { expiresIn: process.env.JWT_EXPIRES }
