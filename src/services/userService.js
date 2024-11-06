@@ -80,7 +80,11 @@ const checkUserLogin = async (email, password) => {
 
 const getAllUsers = async () => {
     return new Promise((resolve, reject) => {
-        db.User.findAll().then(data => {
+        db.User.findAll(
+            {
+                attributes: { excluide: ['password'] }  //lấy tất cả trừ password
+            }
+        ).then(data => {
             resolve(data);
         }).catch(err => {
             reject(err);
