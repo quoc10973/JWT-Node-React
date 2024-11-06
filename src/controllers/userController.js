@@ -5,8 +5,7 @@ const createUsser = async (req, res) => {
     try {
         await userService.createUser(user);
     } catch (e) {
-        let mess = "Duplicate email";
-        return res.status(400).json(mess);
+        return res.status(400).json(e.message);
     }
     return res.status(200).json(user);
 }
@@ -22,7 +21,17 @@ const checkLogin = async (req, res) => {
     }
 }
 
+const getAllUsers = async (req, res) => {
+    try {
+        let users = await userService.getAllUsers();
+        return res.status(200).json(users);
+    } catch (e) {
+        return res.status(400).json(e);
+    }
+}
+
 module.exports = {
     createUsser: createUsser,
-    checkLogin: checkLogin
+    checkLogin: checkLogin,
+    getAllUsers: getAllUsers
 }

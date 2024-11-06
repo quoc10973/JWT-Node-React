@@ -5,15 +5,30 @@ const jwt = require('jsonwebtoken'); //thư viện tạo token
 require('dotenv').config();
 
 const createUser = async (user) => {
-    return new Promise((resolve, reject) => {
-        let salt = bcrypt.genSaltSync(saltRounds);
-        user.role = "Customer";
-        user.password = bcrypt.hashSync(user.password, salt);
-        db.User.create(user).then(data => {
-            resolve(data);
-        }).catch(err => {
-            reject(err);
-        });
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkExistUser = await db.User.findOne({
+                where: { email: user.email }
+            });
+            if (checkExistUser) {
+                reject({
+                    message: "Email is already in use"
+                });
+            }
+            else {
+                let salt = bcrypt.genSaltSync(saltRounds);
+                user.role = "Customer";
+                user.password = bcrypt.hashSync(user.password, salt);
+                db.User.create(user).then(data => {
+                    resolve(data);
+                }).catch(err => {
+                    reject(err);
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+
     });
 }
 
@@ -63,7 +78,18 @@ const checkUserLogin = async (email, password) => {
     });
 }
 
+const getAllUsers = async () => {
+    return new Promise((resolve, reject) => {
+        db.User.findAll().then(data => {
+            resolve(data);
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
 module.exports = {
     createUser: createUser,
-    checkUserLogin: checkUserLogin
+    checkUserLogin: checkUserLogin,
+    getAllUsers: getAllUsers
 }
