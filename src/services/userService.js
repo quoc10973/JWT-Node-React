@@ -28,13 +28,16 @@ const checkUserLogin = async (email, password) => {
                 if (checkPass) {
                     //access token generate for user
                     const playload = { email: user.email, name: user.name };
+
                     const accessToken = jwt.sign(
+
                         playload,
                         process.env.JWT_SECRET,
                         { expiresIn: process.env.JWT_EXPIRES }
                     )
                     resolve({
                         accessToken: accessToken,
+
                         user: {
                             name: user.name,
                             email: user.email,
