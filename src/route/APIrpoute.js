@@ -1,11 +1,11 @@
 import express from 'express';
 import userController from '../controllers/userController';
 import delay from '../middleware/delay';
-
+import jwtAuth from '../middleware/jwtAuth';
 
 let router = express.Router();
 
-router.all('*', delay()); // apply delay to all routes
+router.all('*', jwtAuth()); // apply delay to all routes
 
 let initWebRoutes = (app) => {
     router.get("/api", (req, res) => {
