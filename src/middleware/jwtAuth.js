@@ -2,9 +2,16 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const jwtAuth = (ms = 3000) => {
-    const publicAPI = ["/", "/api/login", "/api/register"];
+const jwtAuth = () => {
+    const publicAPI = ["/", "/login", "/register"];
+
     return (req, res, next) => {
+        // if (publicAPI.find(url => "/api" + url === req.originalUrl)) {
+        //     return next(); cach 1
+        // }
+        if (publicAPI.includes(req.originalUrl.replace("/api", ""))) {
+            return next(); //cach 2
+        }
         //object? optional chaining chạy code mà kh gây ra lỗi có giá trị thì tiếp, không thì undefined
         if (req?.headers?.authorization?.split(' ')?.[1]) {
             try {
@@ -20,6 +27,9 @@ const jwtAuth = (ms = 3000) => {
                 console.log(err);
                 if (err.message.includes('malformed')) {
                     return res.status(401).json('Incorrect Token Format');
+                }
+                if (err.message.includes('expired')) {
+                    return res.status(401).json('Token Expired');
                 }
                 return res.status(401).json('Unauthorized');
             };
