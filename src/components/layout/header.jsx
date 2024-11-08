@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { UserOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 
 
 const Header = () => {
 
-    const Logout = () => {
-        localStorage.removeItem('accessToken');
-    }
+
+    const { auth, setAuth } = useContext(AuthContext);
+    console.log('check auth', auth);
+    const nagivate = useNavigate();
 
     const items = [
         {
@@ -16,27 +18,41 @@ const Header = () => {
             key: 'home',
             icon: <MailOutlined />,
         },
-
+        ...(auth.isAuthenticated ? [
+            {
+                label: <Link to={"/user"}> User </Link>,   // <Link tđên đường dẫn /user khi click vào User
+                key: 'user',
+                icon: <UserOutlined />,
+            },
+        ] : []),
         {
-            label: <Link to={"/user"}> User </Link>,   // <Link tđên đường dẫn /user khi click vào User
-            key: 'user',
-            icon: <UserOutlined />,
-        },
-
-        {
-            label: 'Welcome',
+            label: `Welcome ${auth.user.name}`,
             key: 'SubMenu',
             className: 'right-aligned-submenu',
             icon: <SettingOutlined />,
             children: [
-                {
+                ...(auth.isAuthenticated ? [
+                    {
+                        label: <span onClick={() => {
+                            localStorage.removeItem('accessToken');
+                            setCurrent('home');
+                            nagivate('/');
+                            setAuth({
+                                isAuthenticated: false,
+                                user: {
+                                    email: '',
+                                    name: ''
+                                }
+                            });
+                        }}>  Logout </span>,
+                        key: 'logout',
+                    },
+                ] : [{
                     label: <Link to={"/login"}> Login </Link>,
                     key: 'login',
-                },
-                {
-                    label: <span onClick={() => Logout()}> <Link to={"/"}> Logout </Link> </span>,
-                    key: 'logout',
-                },
+                },]),
+
+
             ],
         },
 

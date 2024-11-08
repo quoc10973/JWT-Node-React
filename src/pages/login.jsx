@@ -3,6 +3,8 @@ import { Button, Form, Input } from 'antd';
 import { loginAPI } from '../util/api';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../components/context/authContext';
+import { useContext } from 'react';
 
 const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
@@ -13,6 +15,7 @@ const openNotificationWithIcon = (type, message, description) => {
 
 const LoginPage = () => {
     const nagivate = useNavigate();
+    const { setAuth } = useContext(AuthContext);
     const onFinish = async (values) => {
         const { email, password } = values;
         try {
@@ -22,6 +25,15 @@ const LoginPage = () => {
                 description: 'Login success!',
             });
             localStorage.setItem('accessToken', response.accessToken);
+            setAuth(
+                {
+                    isAuthenticated: true,
+                    user: {
+                        email: response.user.email,
+                        name: response.user.name,
+                    }
+                }
+            );
             nagivate('/');
         } catch (error) {
             notification.error({
