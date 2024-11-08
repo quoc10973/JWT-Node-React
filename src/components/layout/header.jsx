@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 
 
 const Header = () => {
+
+    const Logout = () => {
+        localStorage.removeItem('accessToken');
+    }
+
     const items = [
         {
             label: <Link to={"/"}> Home Page </Link>,
@@ -25,11 +30,11 @@ const Header = () => {
             icon: <SettingOutlined />,
             children: [
                 {
-                    label: 'Login',
+                    label: <Link to={"/login"}> Login </Link>,
                     key: 'login',
                 },
                 {
-                    label: 'Logout',
+                    label: <span onClick={() => Logout()}> <Link to={"/"}> Logout </Link> </span>,
                     key: 'logout',
                 },
             ],
