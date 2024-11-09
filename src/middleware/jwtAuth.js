@@ -18,9 +18,12 @@ const jwtAuth = () => {
                 const getToken = req.headers.authorization.split(' ')[1];
                 const verifyToken = jwt.verify(getToken, process.env.JWT_SECRET); //verify kiểm tra token có hợp lệ không, nếu hợp lệ trả về data 
                 let decodedToken = jwt.decode(getToken);  //decode giải mã token không cần secret và tính hợp lệ, chỉ lấy data
-                console.log(verifyToken);
-                console.log("-------------------");
-                console.log(decodedToken);
+                // token từ FE đi vào middleware -> decoded sẽ có data rồi tạo biến user mới gán data vào request và cho next đi vào controller
+                req.user = {
+                    email: decodedToken.email,
+                    name: decodedToken.name,
+                    createBy: `Express server, at ${Date.now()}`,
+                }
                 next();
             }
             catch (err) {

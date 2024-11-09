@@ -30,8 +30,13 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const getAccount = async (req, res) => {
+    return res.status(200).json(req.user); //user đã được gán trong middleware khi decode token có data
+}
+
 module.exports = {
     createUsser: createUsser,
     checkLogin: checkLogin,
-    getAllUsers: getAllUsers
+    getAllUsers: getAllUsers,
+    getAccount: getAccount,
 }
