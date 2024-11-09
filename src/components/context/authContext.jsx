@@ -5,8 +5,9 @@ export const AuthContext = createContext({
     isAuthenticated: false,
     user: {
         email: '',
-        name: ''
-    }
+        name: '',
+    },
+    appLoading: true,
 });
 
 export const AuthWrapper = (prob) => {

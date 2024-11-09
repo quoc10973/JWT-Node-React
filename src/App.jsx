@@ -5,7 +5,8 @@ import axios from "./util/axios.customize"
 import { useContext, useEffect } from "react"
 import { getAccountAPI } from "./util/api"
 import { AuthContext } from "./components/context/authContext"
-import { Spin } from "antd"
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 function App() {
 
@@ -13,15 +14,21 @@ function App() {
   useEffect(() => {
     const fetchAccount = async () => {
       setAppLoading(true)
-      const response = await getAccountAPI()
-      if (response) {
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            email: response.email,
-            name: response.name,
-          }
-        })
+      try {
+        const response = await getAccountAPI()
+
+        if (response) {
+          setAuth({
+            isAuthenticated: true,
+            user: {
+              email: response.email,
+              name: response.name,
+            }
+          })
+        }
+      }
+      catch (error) {
+        setAppLoading(false)
       }
       setAppLoading(false);
     }
@@ -37,10 +44,19 @@ function App() {
               position: "fixed",
               top: "50%",
               left: "50%",
-              transform: "translate(-50%, -50%)"
+              transform: "translate(-50%, -50%)",
             }}
             >
-              <Spin size="large" />
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 70,
+                    }}
+                    spin
+                  />
+                }
+              />
             </div>
           </>
           : <>
