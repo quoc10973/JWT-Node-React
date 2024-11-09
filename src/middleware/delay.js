@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const delay = (ms = 3000) => {
+const delay = (ms = 1500) => {
     return (req, res, next) => {
         if (!req.headers.authorization) {
             return res.status(401).json('Unauthorized');
@@ -11,7 +11,7 @@ const delay = (ms = 3000) => {
             const getToken = req.headers.authorization.split(' ')[1];
             const verifyToken = jwt.verify(getToken, process.env.JWT_SECRET);
             let decodedToken = jwt.decode(getToken);
-            setTimeout(next, ms); // 3 seconds delay then next let the request continue.
+            setTimeout(next, ms); // 1.5 seconds delay then next let the request continue.
             console.log(`${verifyToken}`);
             console.log(decodedToken);
         }
