@@ -19,6 +19,8 @@ let initWebRoutes = (app) => {
 
     router.get("/api/users", userController.getAllUsers);
 
+    router.get("/api/account", delay(), userController.getAccount);
+
     return app.use("/", router);
 }
 
